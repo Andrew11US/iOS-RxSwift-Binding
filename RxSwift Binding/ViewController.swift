@@ -7,38 +7,49 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class ViewController: UIViewController {
+    @IBOutlet weak var label: UILabel!
     
-    var circleView: UIView!
-
+    let disposeBag = DisposeBag()
+    var intArray: BehaviorRelay<Int> = BehaviorRelay(value: .zero)
+    var stringArray: BehaviorRelay<String> = BehaviorRelay(value: "")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setup()
+        bindIntArrayToLabel()
+        bindStringArrayToLabel()
     }
     
-    func setup() {
-        circleView = UIView(frame: CGRect(origin: view.center, size: CGSize(width: 100.0, height: 100.0)))
-        circleView.layer.cornerRadius = circleView.frame.width / 2.0
-        circleView.center = view.center
-        circleView.backgroundColor = .purple
-        view.addSubview(circleView)
-        
-        // Add gesture recognizer
-        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(circleMoved(_:)))
-        circleView.addGestureRecognizer(gestureRecognizer)
+    @IBAction func addItemToIntArray(_ sender: UIButton) {
+        let randomInt = Int.random(in: 1...10)
+        intArray.accept(randomInt)
+        print(randomInt)
     }
     
-    
-     
-    @objc func circleMoved(_ recognizer: UIPanGestureRecognizer) {
-        let location = recognizer.location(in: view)
-        UIView.animate(withDuration: 0.1) {
-            self.circleView.center = location
-        }
+    @IBAction func addItemToStringArray(_ sender: UIButton) {
+        let alphabet = ["a", "b", "c", "d", "z"]
+        let randomChar = alphabet.randomElement() ?? "@"
+        stringArray.accept(randomChar)
+        print(randomChar)
     }
-
+    
+    func bindIntArrayToLabel() {
+        intArray
+            .asObservable()
+//            .map { $0 * 10 }
+            .subscribe(onNext: { intStream in
+                self.label.text = String(intStream)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func bindStringArrayToLabel() {
+        stringArray.asObservable().bind(to: label.rx.text).disposed(by: disposeBag)
+    }
 
 }
 
