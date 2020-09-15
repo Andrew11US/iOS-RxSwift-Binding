@@ -48,7 +48,6 @@
 			children = (
 				0131DF4D25050FF7007597AB /* RxSwift Binding */,
 				0131DF4C25050FF7007597AB /* Products */,
-				622E5877563EB86C8F15AF18 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -72,13 +71,6 @@
 				0131DF5C25050FF9007597AB /* Info.plist */,
 			);
 			path = "RxSwift Binding";
-			sourceTree = "<group>";
-		};
-		622E5877563EB86C8F15AF18 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
